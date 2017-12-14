@@ -49,19 +49,22 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && rm -rf /usr/bin/google-chrome* /opt/google/chrome-unstable
 
 # Add chatie user.
-RUN groupadd -r bot && useradd -r -m -G audio,video,sudo -g bot -d /bot bot \
-    && mkdir -p /bot/Downloads \
-    && chown -R bot:bot /bot \
-    && echo "bot ALL=NOPASSWD:ALL" >> /etc/sudoers
+#####RUN groupadd -r bot && useradd -r -m -G audio,video,sudo -g bot -d /bot bot \
+#####    && mkdir -p /bot/Downloads \
+#####    && chown -R bot:bot /bot \
+#####    && echo "bot ALL=NOPASSWD:ALL" >> /etc/sudoers
+RUN mkdir -p /bot/Downloads
 
+#####RUN mkdir /wechaty \
+#####    && chown -R bot:bot /wechaty \
+#####    && mkdir /node_modules
 RUN mkdir /wechaty \
-    && chown -R bot:bot /wechaty \
     && mkdir /node_modules
 
 WORKDIR /wechaty
 
 # Run user as non privileged.
-USER bot
+##### USER bot
 
 COPY package.json .
 RUN npm install \
@@ -103,4 +106,3 @@ LABEL org.label-schema.license="Apache-2.0" \
       org.label-schema.docker.cmd.test="docker run -ti --rm zixia/wechaty test" \
       org.label-schema.docker.cmd.help="docker run -ti --rm zixia/wechaty help" \
       org.label-schema.docker.params="WECHATY_TOKEN=token token from https://www.chatie.io, WECHATY_LOG=verbose Set Verbose Log, TZ='Asia/Shanghai' TimeZone"
-
